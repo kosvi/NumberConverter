@@ -4,7 +4,7 @@ import java.lang.StringBuilder;
 
 public class BinaryConverter implements Converter {
 
-	private static int BINARY_MAX_LENGTH = 10;
+	private static int BINARY_MAX_LENGTH = 20;
 	private static String CONVERTER_NAME = "Binary";
 
 	@Override
@@ -14,8 +14,8 @@ public class BinaryConverter implements Converter {
 
 	@Override
 	public String convertTo(long input) {
-		// We don't care for negatives
-		if (input < 0) {
+		// We don't care for negatives or too big numbers
+		if (input < 0 || !this.checkIntegerInput(input)) {
 			return null;
 		}
 		// 0 = 0 even as binary
@@ -58,6 +58,13 @@ public class BinaryConverter implements Converter {
 		}
 		// Binary number can only include 0's and 1's
 		if (!input.matches("[0|1]+")) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean checkIntegerInput(long input) {
+		if(input>=(((int) Math.pow(2, BINARY_MAX_LENGTH)*2))) {
 			return false;
 		}
 		return true;
