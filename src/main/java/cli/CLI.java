@@ -14,14 +14,12 @@ public class CLI {
 
 	// these are user inputs
 	private long digit;
-	private String otherFormat;
 
 	public CLI(Scanner reader, List<Converter> converters) {
 		this.reader = reader;
 		this.converters = converters;
 		this.selectedConverter = 0;
 		this.digit = 0;
-		this.otherFormat = "0";
 	}
 
 	public void start() {
@@ -47,7 +45,10 @@ public class CLI {
 
 	private void printMenu() {
 		System.out.println("");
-		System.out.println("1) change converter (" + this.converters.get(this.selectedConverter).getName() + ")");
+		System.out.println("Current number: " + this.digit + " = "
+				+ this.converters.get(this.selectedConverter).convertTo(this.digit) + " ("
+				+ this.converters.get(this.selectedConverter).getName() + ")");
+		System.out.println("1) change converter");
 		System.out.println("2) convert from 10-base");
 		System.out.println("3) convert to 10-base");
 		System.out.println("Q) quit");
@@ -66,6 +67,9 @@ public class CLI {
 			break;
 		case 2:
 			this.convertTo();
+			break;
+		case 3:
+			this.convertFrom();
 			break;
 		default:
 			break;
@@ -89,7 +93,7 @@ public class CLI {
 			System.err.println(e.getMessage());
 		}
 		// since all converters were printed with index + 1, we now need to reduce 1
-		if (value > 0 && value < this.converters.size()) {
+		if (value > 0 && value <= this.converters.size()) {
 			this.selectedConverter = value - 1;
 		}
 	}
@@ -103,15 +107,37 @@ public class CLI {
 		} catch (NumberFormatException e) {
 			System.err.println(e.getMessage());
 		}
+		String digitInOtherFormat = null;
 		if (value >= 0) {
 			this.digit = value;
-			this.otherFormat = this.converters.get(this.selectedConverter).convertTo(value);
+			digitInOtherFormat = this.converters.get(this.selectedConverter).convertTo(value);
 		}
-		if (this.otherFormat != null) {
-			System.out.println("\n" + this.digit + " is " + this.otherFormat + " in "
+		if (digitInOtherFormat != null) {
+			System.out.println("\n" + this.digit + " is " + digitInOtherFormat + " in "
 					+ this.converters.get(this.selectedConverter).getName() + "-format\n");
 		} else {
 			System.out.println("\nInvalid input or too big integer.\n");
+		}
+		System.out.print("press <Enter> to continue...");
+		this.reader.nextLine();
+	}
+
+	private void convertFrom() {
+		System.out.println("Give input as " + this.converters.get(this.selectedConverter).getName() + ":");
+		System.out.print("> ");
+		String input = null;
+		try {
+			input = this.reader.nextLine();
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		long value = this.converters.get(this.selectedConverter).convertFrom(input);
+		if (value > 0) {
+			this.digit = value;
+			System.out.println("\n" + input + " is " + value + " if converted from "
+					+ this.converters.get(this.selectedConverter).getName() + "-format\n");
+		} else {
+			System.out.println("\nInvalid input or too big number.\n");
 		}
 		System.out.print("press <Enter> to continue...");
 		this.reader.nextLine();

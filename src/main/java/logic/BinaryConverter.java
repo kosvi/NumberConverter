@@ -64,7 +64,7 @@ public class BinaryConverter implements Converter {
 	}
 
 	private boolean checkIntegerInput(long input) {
-		if(input>=(((int) Math.pow(2, BINARY_MAX_LENGTH)*2))) {
+		if (input >= (((int) Math.pow(2, BINARY_MAX_LENGTH)) * 2)) {
 			return false;
 		}
 		return true;
