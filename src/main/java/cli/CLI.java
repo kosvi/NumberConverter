@@ -1,7 +1,6 @@
 package cli;
 
 import java.util.Scanner;
-import java.io.IOException;
 import java.util.List;
 
 import logic.Converter;

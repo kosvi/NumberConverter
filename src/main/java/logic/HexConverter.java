@@ -7,7 +7,6 @@ public class HexConverter implements Converter {
 
 	@Override
 	public String convertTo(long input) {
-		long input2 = input;
 		// We don't care for negatives or too big numbers
 		if (input < 0 || !this.checkIntegerInput(input)) {
 			return null;
